@@ -22,6 +22,14 @@ jobs:
     - name: Deploy to minikube
       run:
         kubectl apply -f k8s-node-app.yaml
+        echo "waitin for pod to be ready..."
+        kubectl wait --for=condition=ready pod -l app=nodejs-app --timeout=120s || (kubectl describe pod -l app=nodejs-app && exit 1)
+    - name: Debugging Info (If it fails, this will show why)
+      if: always() #
+      run: |
+        kubectl get pods
+        kubectl get services
+        kubectl logs -l app=nodejs-app # ვნახოთ Node.js-ის ლოგები
     - name: Test service URLs
       run: |
           minikube service list
