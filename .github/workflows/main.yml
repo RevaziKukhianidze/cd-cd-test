@@ -26,3 +26,5 @@ jobs:
       run: |
           minikube service list
           minikube service nodejs-app --url
+          sleep 5
+          minikube service nodejs-app --url
